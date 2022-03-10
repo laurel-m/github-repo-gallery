@@ -4,6 +4,8 @@ const username = "laurel-m";
 const repoList = document.querySelector(".repo-list");
 const repoInfoAppear = document.querySelector(".repos");
 const repoDataAppear = document.querySelector(".repo-data");
+const backToRepoButton = document.querySelector("button");
+const filterInput = document.querySelector(".filter-repos");
 
 // function to pull GitHub profile info //
 const getInfo = async function () {
@@ -27,7 +29,7 @@ const userInfo = function (data) {
       <p><strong>Name:</strong> ${data.name}</p>
       <p><strong>Bio:</strong> ${data.bio}</p>
       <p><strong>Location:</strong> ${data.location}</p>
-      <p><strong>Number of public repos:</strong> ${data.public_repos}</p>
+      <p><strong>Number of Public Repos:</strong> ${data.public_repos}</p>
     </div> `;
     overview.append(user);
     repoPull();
@@ -47,6 +49,7 @@ const repoDisplay = function (repos) {
     repoItem.classList.add("repo");
     repoItem.innerHTML = `<h3>${repo.name}</h3>`;
     repoList.append(repoItem);
+    filterInput.classList.remove("hide");
   } 
 };
 
@@ -83,5 +86,27 @@ const displayInfo = function (repoInfo, languages) {
   repoDataAppear.append(info);
   repoDataAppear.classList.remove("hide");
   repoInfoAppear.classList.add("hide");
+  backToRepoButton.classList.remove("hide");
 };
 
+// click event for back button //
+backToRepoButton.addEventListener("click", function () {
+  repoInfoAppear.classList.remove("hide");
+  repoDataAppear.classList.add("hide");
+  backToRepoButton.classList.add("hide");
+});
+
+// add an input event to search box //
+filterInput.addEventListener("input", function(e) {
+  const searchText = e.target.value;
+  const repos = document.querySelectorAll(".repo");
+  const text = searchText.toLowerCase();
+  for (const repo of repos) {
+    const eachRepo = repo.innerText.toLowerCase();
+    if (eachRepo.includes(text)) {
+      repo.classList.remove("hide");
+    } else {
+      repo.classList.add("hide");
+     }
+    }
+  });
