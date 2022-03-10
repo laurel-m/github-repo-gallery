@@ -1,6 +1,7 @@
 // profile information //
 const overview = document.querySelector(".overview");
 const username = "laurel-m";
+const repoList = document.querySelector(".repo-list");
 
 // function to pull GitHub profile info //
 const getInfo = async function () {
@@ -27,5 +28,22 @@ const userInfo = function (data) {
       <p><strong>Number of public repos:</strong> ${data.public_repos}</p>
     </div> `;
     overview.append(user);
+    repoPull();
 };
 
+// function to fetch repos //
+const repoPull = async function () {
+  const repoInfo = await fetch (`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+  const repoData = await repoInfo.json();
+  repoDisplay(repoData);
+};
+
+// function to display repo info //
+const repoDisplay = function (repos) {
+  for (const repo of repos) {
+    const repoItem = document.createElement("li");
+    repoItem.classList.add("repo");
+    repoItem.innerHTML = `<h3>${repo.name}</h3>`;
+    repoList.append(repoItem);
+  } 
+};
